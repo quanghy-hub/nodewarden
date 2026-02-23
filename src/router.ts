@@ -38,7 +38,7 @@ import { handleSync } from './handlers/sync';
 
 // Setup handlers
 import { handleSetupPage, handleSetupStatus, handleDisableSetup } from './handlers/setup';
-import { handleKnownDevice, handleGetDevices } from './handlers/devices';
+import { handleKnownDevice, handleGetDevices, handleUpdateDeviceToken } from './handlers/devices';
 
 // Import handler
 import { handleCiphersImport } from './handlers/import';
@@ -545,6 +545,13 @@ export async function handleRequest(request: Request, env: Env): Promise<Respons
     // Devices endpoint
     if (path === '/api/devices' && method === 'GET') {
       return handleGetDevices(request, env, userId);
+    }
+
+    // Device push token endpoint (no-op compatibility handler)
+    const deviceTokenMatch = path.match(/^\/api\/devices\/identifier\/([^/]+)\/token$/i);
+    if (deviceTokenMatch && (method === 'PUT' || method === 'POST')) {
+      const deviceIdentifier = decodeURIComponent(deviceTokenMatch[1]);
+      return handleUpdateDeviceToken(request, env, userId, deviceIdentifier);
     }
 
     // Not found

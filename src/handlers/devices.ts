@@ -40,3 +40,19 @@ export async function handleGetDevices(request: Request, env: Env, userId: strin
   });
 }
 
+// PUT /api/devices/identifier/{deviceIdentifier}/token
+// Bitwarden mobile reports push token updates to this endpoint.
+// NodeWarden does not implement push notifications, so accept and no-op.
+export async function handleUpdateDeviceToken(
+  request: Request,
+  env: Env,
+  userId: string,
+  deviceIdentifier: string
+): Promise<Response> {
+  void request;
+  void env;
+  void userId;
+  void deviceIdentifier;
+  return new Response(null, { status: 200 });
+}
+
